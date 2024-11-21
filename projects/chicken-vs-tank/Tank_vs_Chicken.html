@@ -1,657 +1,748 @@
 <!DOCTYPE html>
+
 <head>
 	<title>Tank vs. Chicken</title>
 	<meta charset="utf-8">
 	<style>
-	*{
-		font-family: verdana;
-		text-align: center;
-	}
-	#monCanevas{
-		position:absolute;
-		display:block;
-		top: 10%;
-		right:50%; /* Move it to the right for 50% of parent element*/
-    margin-right:-355.5px;/* You need here to put 1/2 of what you have below in width*/
-    width:711px;
-		border: 4px solid #000000;
-	}
-	div#gameStartDiv{
-		position: absolute;
-		background-image: url(images/looping_house_background.png);
-		top: 10%;
-		opacity: 0.8;
-		right:50%; /* Move it to the right for 50% of parent element*/
-    margin-right:-355.5px;/* You need here to put 1/2 of what you have below in width*/
-    width:711px;
-		height: 400px;
-		background-color: black;
-		border: 4px solid #000000;
-	}
-	div#gameStartDiv p{
-		background-color: rgba(0, 0, 0, 0.66);
-		color: white;
-		padding: 20px;
-	}
-	div#gameOverDiv{
-		display: none;
-		position: absolute;
-		top: 10%;
-		right:50%; /* Move it to the right for 50% of parent element*/
-    margin-right:-355.5px;/* You need here to put 1/2 of what you have below in width*/
-    width:711px;
-		height: 400px;
-		border: 4px solid #000000;
-		background-color:rgba(255, 0, 0, 0.89);
-	}
-	button{
-		padding: 10px 20px;
-		background-color: white;
-		border-radius: 10px;
-		border: 1px ridge black;
-	}
-	button:hover{
-		border-color: white;
-		cursor: pointer;
-	}
+		* {
+			font-family: verdana;
+			text-align: center;
+		}
+
+		#monCanevas {
+			position: absolute;
+			display: block;
+			top: 10%;
+			right: 50%;
+			/* Move it to the right for 50% of parent element*/
+			margin-right: -355.5px;
+			/* You need here to put 1/2 of what you have below in width*/
+			width: 711px;
+			border: 4px solid #000000;
+		}
+
+		#gameControls {
+			width: 90%;
+			position: absolute;
+			top: 60%;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+
+		div#gameStartDiv {
+			position: absolute;
+			background-image: url(images/looping_house_background.png);
+			top: 10%;
+			opacity: 0.8;
+			right: 50%;
+			/* Move it to the right for 50% of parent element*/
+			margin-right: -355.5px;
+			/* You need here to put 1/2 of what you have below in width*/
+			width: 711px;
+			height: 400px;
+			background-color: black;
+			border: 4px solid #000000;
+		}
+
+		div#gameStartDiv p {
+			background-color: rgba(0, 0, 0, 0.66);
+			color: white;
+			padding: 20px;
+		}
+
+		div#gameOverDiv {
+			display: none;
+			position: absolute;
+			top: 10%;
+			right: 50%;
+			/* Move it to the right for 50% of parent element*/
+			margin-right: -355.5px;
+			/* You need here to put 1/2 of what you have below in width*/
+			width: 711px;
+			height: 400px;
+			border: 4px solid #000000;
+			background-color: rgba(255, 0, 0, 0.89);
+		}
+
+		button {
+			padding: 10px 20px;
+			background-color: white;
+			border-radius: 10px;
+			border: 1px ridge black;
+		}
+
+		button.controls {
+			width: 30%;
+			padding: 70px 0;
+			background-color: white;
+			border-radius: 10px;
+			border: 1px ridge black;
+    	touch-action: manipulation;
+		}
+
+		button:hover {
+			border-color: white;
+			cursor: pointer;
+		}
 	</style>
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+		integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
+
 <body>
-<!-- classe -->
-<script src="horizontalSheet.js"></script>
-<!-- sons -->
-<audio id="tankSound" src="sounds/tankSound.mp3" loop="on"></audio>
-<audio id="bgMusic" src="sounds/dauntingLoop.mp3" loop="on"></audio>
-<audio id="menuMusic" src="sounds/menuSongEDITED.mp3" autoplay loop="on"></audio>
-<audio id="scoreSound" src="sounds/yeahSound.mp3"></audio>
-<audio id="coinSound" src="sounds/coinSound.mp3"></audio>
-<audio id="jumpSound" src="sounds/jumpSound.mp3"></audio>
-<audio id="hurtSound" src="sounds/hurtSound.mp3"></audio>
-<audio id="wingFlapSound" src="sounds/birdflap.mp3"></audio>
+	<!-- classe -->
+	<script src="horizontalSheet.js"></script>
 
-<canvas id="monCanevas" width="711" height="400"></canvas>
+	<!-- sons -->
+	<audio id="tankSound" src="sounds/tankSound.mp3" loop="on"></audio>
+	<audio id="bgMusic" src="sounds/dauntingLoop.mp3" loop="on"></audio>
+	<audio id="menuMusic" src="sounds/menuSongEDITED.mp3" autoplay loop="on"></audio>
+	<audio id="scoreSound" src="sounds/yeahSound.mp3"></audio>
+	<audio id="coinSound" src="sounds/coinSound.mp3"></audio>
+	<audio id="jumpSound" src="sounds/jumpSound.mp3"></audio>
+	<audio id="hurtSound" src="sounds/hurtSound.mp3"></audio>
+	<audio id="wingFlapSound" src="sounds/birdflap.mp3"></audio>
 
-<div id="gameStartDiv">
-	<h1>Tanks vs Chicken</h1>
-	<p>
-	 	<strong>
-		<i class="fa fa-question-circle-o" aria-hidden="true"></i>
-	 	Comment jouer
-	 	</strong>
-		<br>
-		<br>
-		Déplacez-vous avec les flèches
-		<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
-		<i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i>
-		<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
-		<br>
-		<br>
-		Gagnez des points en vous déplaçant
-		<i class="fa fa-plus-circle" aria-hidden="true"></i>
-		<br>
-		<br>
-		Évitez les tanks <i class="fa fa-meh-o" aria-hidden="true"></i>
-		<br>
-		<br>
-		Bonne chance.
-	</p>
-	<button id="playButton" onClick="jouer()">Jouer</button>
-</div>
-<div id="gameOverDiv">
-	<h1><i class="fa fa-times-circle-o" aria-hidden="true"></i> GAME OVER <i class="fa fa-times-circle-o" aria-hidden="true"></i></h1>
-	<p>Votre score : <span id='score'></span></p>
-	<button id="stopButton" onClick="rejouer()">Recommencer</button>
-</div>
+	<canvas id="monCanevas" width="711" height="400"></canvas>
 
+	<div id="gameStartDiv">
+		<h1>Tanks vs Chicken</h1>
+		<p>
+			<strong>
+				<i class="fa fa-question-circle-o" aria-hidden="true"></i>
+				Comment jouer
+			</strong>
+			<br>
+			<br>
+			Déplacez-vous avec les flèches
+			<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
+			<i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i>
+			<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
+			<br>
+			<br>
+			Gagnez des points en vous déplaçant
+			<i class="fa fa-plus-circle" aria-hidden="true"></i>
+			<br>
+			<br>
+			Évitez les tanks <i class="fa fa-meh-o" aria-hidden="true"></i>
+			<br>
+			<br>
+			Bonne chance.
+		</p>
+		<button id="playButton" onClick="jouer()">Jouer</button>
+	</div>
 
-<script>
-//===========================VARIABLES===================================
-var canevas=document.getElementById("monCanevas");
-var contexte=canevas.getContext("2d");
+	<div id="gameControls">
+		<button id="moveLeftBtn" class="controls"><i class="fa fa-3x fa-arrow-circle-o-left" aria-hidden="true"></i></button>
+		<button id="moveUpBtn" class="controls"><i class="fa fa-3x fa-arrow-circle-o-up" aria-hidden="true"></i></button>
+		<button id="moveRightBtn" class="controls"><i class="fa fa-3x fa-arrow-circle-o-right" aria-hidden="true"></i></button>
+	</div>
 
-var jumping=false;//ne saute pas au départ
-var firstJumpSpeed=200;//vitesse du premier saut
-var wingsForce=75;//force du battement d'aile
-var wingRateDelay=350;//temp en MS avant de rebattre les ailes
-var grounded=false;//ne touche pas le sol au départ
-var glissement = 1;//resistance au mouvement
-var gravity = 10;//Vitesse d'acceleration vers le sol
-var chickenSpeed = 8;//vitesse de deplacement
-var chickenFacesRight=true;
-var chickenHit = 0;//Nbr de coups recu (pour baisser la vie)
-var chickenLifes = 3;//The number of life you can loose
-var defaultChickenX = canevas.width/2;//Position de depart du person
-var defaultChickenY = canevas.height/4;//Position de depart du person
-var lastWingMove = Date.now();
-var dirCollis=null;//coté de la collision (du player)
-var score = 1;
+	<div id="gameOverDiv">
+		<h1><i class="fa fa-times-circle-o" aria-hidden="true"></i> GAME OVER <i class="fa fa-times-circle-o"	aria-hidden="true"></i></h1>
+		<p>Votre score : <span id='score'></span></p>
+		<button id="stopButton" onClick="rejouer()">Recommencer</button>
+	</div>
 
-//spritesheet contenant les positions du tank
-var leftTankSheet = new Image();
-leftTankSheet.src = 'images/Left_Slug_Tank.png';
-var rightTankSheet = new Image();
-rightTankSheet.src = 'images/Right_Slug_Tank.png';
-var tanks = [];//Will contain the tanks
-var tankOnScreen = false;
-var tankSpawnRate = 0.0050;//the bigger the more tank there is
-var tankDirectionResult;
-var tankSpeed = chickenSpeed +1;//Vitesse ideale 0.2 de plus que chickenSpeed
+	<script>
+		//=======================================================================//
+		//===========================VARIABLES===================================//
+		//=======================================================================//
 
-//Les bonus a ramasser
-var coins = [];
-var coinSpawnRate = 0.75;
-var imgCoins = new Image(); imgCoins.src = "images/coin.png";
-//plateformesVolantes mises dans un tableau
-var plateformesVolantes = [];//vide au départ
-var imagePf = new Image(); imagePf.src="images/pf.png";
-var pfX;
-var pfY;
-var pfL = 143;//Largeur des plateformes
-var pfH = 40;//Hauteur des plateformes
-for(var i=0; i < 3; i++){
-	pfX = rndMinMax((-canevas.width)+150, (canevas.width-150));
-	pfY = rndMinMax(canevas.height/4,canevas.height-25);
-	var pf={x:pfX, y:pfY, image:imagePf, L:pfL, H:pfH}
-	plateformesVolantes.push(pf);
+		var canevas = document.getElementById("monCanevas");
+		var contexte = canevas.getContext("2d");
 
-	if(Math.random() < coinSpawnRate){
-		var coin = new horizontalSheet(0,0,pfX+50,pfY - 40,0,0,0,false,false,5,6,30,30,0,contexte,imgCoins);
-		coins.push(coin);
-	}
-}
+		var jumping = false;//ne saute pas au départ
+		var firstJumpSpeed = 250;//vitesse du premier saut
+		var wingsForce = 110;//force du battement d'aile
+		var wingRateDelay = 300;//temp en MS avant de rebattre les ailes
+		var grounded = false;//ne touche pas le sol au départ
+		var glissement = 1;//resistance au mouvement
+		var gravity = 20;//Vitesse d'acceleration vers le sol
+		var chickenSpeed = 8;//vitesse de deplacement
+		var chickenFacesRight = true;
+		var chickenHit = 0;//Nbr de coups recu (pour baisser la vie)
+		var chickenLifes = 3;//The number of life you can loose
+		var defaultChickenX = canevas.width / 2;//Position de depart du person
+		var defaultChickenY = canevas.height / 4;//Position de depart du person
+		var lastWingMove = Date.now();
+		var dirCollis = null;//coté de la collision (du player)
+		var score = 1;
 
-//background
-var imageBG=new Image();
-imageBG.src="images/looping_house_background.png";
-xBG = 0 - (imageBG.width/3);
-yBG = 0;
+		//spritesheet contenant les positions du tank
+		var leftTankSheet = new Image();
+		leftTankSheet.src = 'images/Left_Slug_Tank.png';
+		var rightTankSheet = new Image();
+		rightTankSheet.src = 'images/Right_Slug_Tank.png';
+		var tanks = [];
+		var tankOnScreen = false;
+		var tankSpawnRate = 0.0075;// higher = more tanks
+		var tankDirectionResult;
+		var tankSpeed = chickenSpeed + 1;// Plus que chickenSpeed
 
-//Fait la delimitation du sol
-var ground = [];
-xSol = 0;
-var sol={x:xSol, y:canevas.height-20, L:canevas.width, H:64};
-ground.push(sol);
+		//Les bonus a ramasser
+		var coins = [];
+		var coinSpawnRate = 0.8;
+		var imgCoins = new Image(); imgCoins.src = "images/coin.png";
 
-//spritesheet contenant les positions du personnage
-var leftChickSheet = new Image();
-leftChickSheet.src = 'images/chickLeft.png';
-var rightChickSheet = new Image();
-rightChickSheet.src = 'images/chickRight.png';
-//horizontalSheet : i,indexImage,x,y,v,scale,Vx,Vy,jumping,grounded,ticsParImage,nbImages,L,H,xDebut,contexte,sheet
-var chicken = new horizontalSheet(0,0,defaultChickenX,defaultChickenY,chickenSpeed,0,0,false,false,5,7,24,24,0,contexte,rightChickSheet);
+		//plateformesVolantes mises dans un tableau
+		var plateformesVolantes = [];//vide au départ
+		var imagePf = new Image(); imagePf.src = "images/pf.png";
+		var pfX;
+		var pfY;
+		var pfL = 143;//Largeur des plateformes
+		var pfH = 40;//Hauteur des plateformes
+		for (var i = 0; i < 3; i++) {
+			pfX = rndMinMax((-canevas.width) + 175, (canevas.width - 175));
+			pfY = rndMinMax(canevas.height / 6, canevas.height / 3);
+			var pf = { x: pfX, y: pfY, image: imagePf, L: pfL, H: pfH }
+			plateformesVolantes.push(pf);
 
-var heartSprites = new Image(); heartSprites.src = "images/heartSpritesheet.png";
-var lifeBar = new horizontalSheet(0,0,90,48,0,0,0,false,false,5,1,40,40,0,contexte,heartSprites);
-
-
-explosions = [];
-var scoreExplosionSheet = new Image();
-scoreExplosionSheet.src = "images/Explosion.png";
-var lastExplosion;
-var showScoreExplos = false;
-
-//touches appuyees dans objet JS
-var keysDown = {};
-//===============================FONCTIONS============================s
-//inserer touches appuyées
-addEventListener("keydown",enregistrer);
-function enregistrer(event)
-{
-	keysDown[event.keyCode] = true;
-}
-//effacer touches relachees
-addEventListener("keyup",effacer);
-function effacer(event)
-{
-	delete keysDown[event.keyCode];
-}
-
-//animation
-var t1 = Date.now();//demarrage animation
-
-function animer()
-{
-	contexte.clearRect(0,0,canevas.width,canevas.height);
-	afficher();
-	var t2 = Date.now();
-	var dt = (t2 - t1)/1000;
-	incrementer(dt);
-	t1 = t2;
-	animAvecRequest = requestAnimationFrame(animer);
-};
-// requestAnimationFrame(animer);
-
-function afficher()
-{
-	contexte.drawImage(imageBG, xBG, yBG);
-	// plateformesVolantes à partir du tableau
-	for (var i = 0; i < plateformesVolantes.length; i++) {
-		contexte.drawImage(plateformesVolantes[i].image, plateformesVolantes[i].x, plateformesVolantes[i].y);
-	}
-	for (var i = 0; i < coins.length; i++) {
-		coins[i].afficher();
-	}
-	afficherScore();
-	afficherVies();
-	//player
-	chicken.afficher();
-	//chicken.scale(2);
-
-	//Affiche l'explosion du score
-	for(var i=0;i<explosions.length;i++){
-		explosions[i].afficher();
-	}
-
-	for(var i=0; i < coins.length; i++){
-		if(typeof collisCheck(chicken, coins[i]) == "string"){
-			// var coinsCollected += 1;
-			coins.splice(i,1);
-			score+=500;
-			playSound("coinSound");
-		}
-	}
-
-	for(var i=0;i<tanks.length;i++){
-		tanks[i].afficher();
-		//Fait mourir le poulet si touche un tank
-		if(typeof collisCheck(chicken, tanks[i]) == "string"){
-			chickenHit += 1;
-		}
-		if(chickenHit > 15){
-			chickenLifes -= 1;
-			playSound("hurtSound");
-			//Reset les hits
-			chickenHit = 0;
-		}
-		//Choisis la decrementation du x du tank
-		if(tankDirectionResult == "left"){
-			tanks[i].x += tanks[i].v;
-		}
-		else if(tankDirectionResult == "right"){
-			tanks[i].x -= tanks[i].v;
-		}
-
-		//Retirera les tanks en fonction de la direction
-		if(tanks[i].x > canevas.width && tankDirectionResult == "left"){
-			tanks.splice(i,1);
-			stopSound("tankSound");
-			tankOnScreen = false;
-		}
-		else if(tanks[i].x < -250 && tankDirectionResult == "right"){
-			tanks.splice(i,1);
-			stopSound("tankSound");
-			tankOnScreen = false;
-		}
-	}
-
-	//Cree les nouveaux tanks
-	var tankRandomizer = Math.random();
-	if(tankRandomizer < tankSpawnRate && !tankOnScreen){
-		tankOnScreen = true;
-		var tankDirection = Math.random();
-
-		if(tankDirection > 0.5){//viendra par la gauche
-		  tankDirectionResult = "left";
-			//horizontalSheet : i,indexImage,x,y,v,scale,Vx,Vy,jumping,grounded,ticsParImage,nbImages,L,H,xDebut,contexte,sheet
-			var tank = new horizontalSheet(0,0,0-canevas.width,canevas.height-163,tankSpeed,0,0,false,false,3,8,210,210,0*210,contexte,rightTankSheet);
-			playSound("tankSound");
-		}
-		else{//viendra par la droite
-		  tankDirectionResult = "right";
-			//horizontalSheet : i,indexImage,x,y,v,scale,Vx,Vy,jumping,grounded,ticsParImage,nbImages,L,H,xDebut,contexte,sheet
-			var tank = new horizontalSheet(0,0,2*canevas.width,canevas.height-163,tankSpeed,0,0,false,false,3,8,210,210,0*210,contexte,leftTankSheet);
-			playSound("tankSound");
-		}
-		tanks.push(tank);
-	}
-
-};
-
-function collisCheck(shapeA, shapeB)
-{
-	dirCollis = null;//initialiser direction de collision
-	//calcul de Dx (voir shéma sur feuille)
-	var Dx = (shapeA.x + shapeA.L/2) - (shapeB.x + shapeB.L / 2);
-	//calcul de Dy
-	var Dy = (shapeA.y + shapeA.H/2) - (shapeB.y + shapeB.H / 2);
-	// calcul du coté de la collision
-	var offsetX = shapeA.L/2 + shapeB.L / 2 - Math.abs(Dx);
-	var offsetY = shapeA.H/2 + shapeB.H / 2 - Math.abs(Dy);
-	//condition de collision
-	if (Math.abs(Dx) < shapeA.L/2 + shapeB.L / 2 && Math.abs(Dy) < shapeA.H/2 + shapeB.H / 2) {
-		if (offsetX >= offsetY) {
-			if (Dy > 0) {
-				dirCollis = "top";//top
-				shapeA.y += offsetY;//qd ils se touchent, offsetY=0
-			}
-			else {
-				dirCollis = "bottom";//bottom
-				shapeA.y -= offsetY;
+			if (Math.random() < coinSpawnRate) {
+				var coin = new horizontalSheet(0, 0, pfX + 50, pfY - 40, 0, 0, 0, false, false, 5, 6, 30, 30, 0, contexte, imgCoins);
+				coins.push(coin);
 			}
 		}
-		else {
-			if (Dx > 0) {
-				dirCollis = "left";//left
-				shapeA.x += offsetX;//qd ils se touchent, offsetX=0
-			}
-			else {
-				dirCollis = "right";//right
-				shapeA.x -= offsetX;
-			}
-		}
-	}
-	return dirCollis;
-}
 
-function incrementer(dt)
-{
-	chicken.Vx *= glissement;//effet de glissement
-	chicken.Vy += gravity;//effet de gravitee
- 	chicken.grounded = false;
- 	chicken.x += chicken.Vx * dt;
- 	chicken.y += chicken.Vy * dt;
+		//background
+		var imageBG = new Image();
+		imageBG.src = "images/looping_house_background.png";
+		xBG = 0 - (imageBG.width / 3);
+		yBG = 0;
 
- 	// test de collision chicken - plateforme
-	for(var i = 0; i < plateformesVolantes.length; i++){
-		var dir = collisCheck(chicken, plateformesVolantes[i]);
-		if(dir == 'left' || dir == 'right'){
-			chicken.Vx *= -1;//Fait rebondir perso
-			chicken.jumping = false;//bloque le saut
-		}
-		else if(dir == 'bottom'){
-			chicken.grounded = true;//les pieds touchent une plateforme
-			chicken.jumping = false;//Permet le saut
-			firstJump = true;
-			doubleJumped = false;
-		}
-		else if(dir == "top"){
-			chicken.Vy *= -1;//Fait descendre vers le bas
-		}
-	}
+		//Fait la delimitation du sol
+		var ground = [];
+		xSol = 0;
+		var sol = { x: xSol, y: canevas.height - 20, L: canevas.width, H: 64 };
+		ground.push(sol);
 
-	for(var i = 0; i < ground.length; i++){
-		var dir = collisCheck(chicken, ground[i]);
-		if(dir == 'bottom'){
-			chicken.grounded = true;//les pieds touchent une plateforme
-			chicken.jumping = false;//Permet le saut
-			firstJump = true;
-			doubleJumped = false;
-		}
-	}
-
-	//Saut avec spacebar(32) ou flecheHaut(38) vers la gauche
-	if(32 in keysDown || 38 in keysDown){
-		if(chickenFacesRight){
-			chicken.sheet = rightChickSheet;
-			chicken.xDebut = 2*24;
-		}
-		else if(!chickenFacesRight){
-			chicken.sheet = leftChickSheet;
-			chicken.xDebut = 4*24;
-		}
-
-		if(chicken.grounded){//Premier saut
-			playSound("jumpSound");
-			firstJump = false;
-			chicken.Vy -= firstJumpSpeed;
-		}
-		else if(Date.now() - lastWingMove > wingRateDelay){//Battement des ailes
-			playSound("wingFlapSound");
-			setVolume("wingFlapSound", 0.15);
-			chicken.Vy -= wingsForce;
-			lastWingMove = Date.now();
-		}
-		chicken.ticsParImage = 5;
-		chicken.nbImages = 1;
-		chicken.L = 24;
-		chicken.jumping = true;
-		chicken.grounded = false;
-	}
-
-	//fleche droite
-	if(39 in keysDown){
-		glissement = 0.95;//Reactive le glissement si perso depasse limite
-		chicken.ticsParImage = 5;
-		chicken.sheet = rightChickSheet;
-		if(!chicken.grounded){
-			chicken.nbImages = 1;
-			chicken.xDebut = 1*24;
-		}
-		else{
-			chicken.nbImages = 4;
-			chicken.xDebut = 0*24;
-		}
-		chicken.L = 24;
-		chicken.Vx += chicken.v;
-		chickenFacesRight = true;
-
-		//Mouvement du decor vers la droite
-		if(chicken.x > canevas.width - (canevas.width/2)){
-			score ++;
-			//Garde le personnage a sa place
-			chicken.x = canevas.width - (canevas.width/2);
-			xBG -= chickenSpeed;
-			glissement = 0.01;//Limite le glissement pour pas sortir du cadre
-
-			//Fait bouger les tank en consequence du mouvement
-			for(var i=0;i<tanks.length;i++){
-				tanks[i].x -= chickenSpeed;
-			}
-
-			for (var i = 0; i < plateformesVolantes.length; i++){
-				plateformesVolantes[i].x -= chickenSpeed;
-				//Efface les plateforme qui depassent du canvas
-				if(plateformesVolantes[i].x < (-canevas.width-140)){
-					plateformesVolantes.splice(i,1);
-					//Ajoute une nouvelle plateforme
-					pfX = rndMinMax(700,1400);
-					pfY = rndMinMax(80, 350);
-					var pf={x:pfX, y:pfY, image:imagePf, L:134, H:40}
-					plateformesVolantes.push(pf);
-
-					//Ajoute les pieces
-					if(Math.random() < coinSpawnRate){
-						var coin = new horizontalSheet(0,0,pfX+50,pfY - 40,0,0,0,false,false,5,6,30,30,0,contexte,imgCoins);
-						coins.push(coin);
-					}
-				}
-			}
-			//Retire les pieces qui sortent
-			for (var i = 0; i < coins.length; i++){
-				coins[i].x -= chickenSpeed;
-				if(coins[i].x < (-canevas.width-140)){
-					coins.splice(i,1);
-				}
-			}
-
-			//loop de background
-			if(xBG < 0 -(imageBG.width/2)){
-				xBG = 0;
-			}
-		}
-	}
-
-	//fleche gauche
-	if(37 in keysDown){
-		glissement = 0.95;//Reactive le glissement si perso depasse limite
-		chicken.ticsParImage = 5;
-		// chicken.sheet = leftChickenSheet;
-		chicken.sheet = leftChickSheet;
-		if(!chicken.grounded){
-			chicken.nbImages = 1;
-			chicken.xDebut = 3*24;
-		}
-		else{
-			chicken.nbImages = 4;
-			chicken.xDebut = 3*24;
-		}
-		chicken.L = 24;
-		chicken.Vx -= chicken.v;
-		chickenFacesRight = false;
-
-		//Mouvement du decor vers la gauche
-		if(chicken.x < 0 + (canevas.width/2)){
-			score ++;//Des point s'ajoute lors du deplacement
-			//Garde le personnage a sa place
-			chicken.x = 0 + (canevas.width/2);
-			xBG += chickenSpeed;
-			glissement = 0.01;//Limite le glissement pour pas sortir du cadre
-
-			//Fait bouger les tank en consequence du mouvement
-			for(var i=0;i<tanks.length;i++){
-				tanks[i].x += chickenSpeed;
-			}
-
-			for (var i = 0; i < plateformesVolantes.length; i++){
-				plateformesVolantes[i].x += chickenSpeed;
-				//Efface les plateforme qui depassent du canvas
-				if(plateformesVolantes[i].x > canevas.width){
-					plateformesVolantes.splice(i,1);
-					//Ajoute une nouvelle plateforme
-					pfX = rndMinMax(-700-140,0-140);
-					pfY = rndMinMax(80,350);
-					var pf={x:pfX, y:pfY, image:imagePf, L:134, H:40}
-					plateformesVolantes.push(pf);
-					//Ajoute les pieces
-					if(Math.random() < coinSpawnRate){
-						var coin = new horizontalSheet(0,0,pfX+50,pfY - 40,0,0,0,false,false,5,6,30,30,0,contexte,imgCoins);
-						coins.push(coin);
-					}
-				}
-			}
-
-			//Retire les pieces qui sortent
-			for (var i = 0; i < coins.length; i++){
-				coins[i].x += chickenSpeed;
-				if(coins[i].x > (canevas.width+140)){
-					coins.splice(i,1);
-				}
-			}
-
-			//loop de background
-			if(xBG > 0){
-				xBG = 0 - canevas.width;
-			}
-		}
-	}
-
-	// //Aucune touche appuyes
-	if(Object.keys(keysDown).length == 0 && !chicken.jumping ){
-		if(chickenFacesRight){
-			chicken.sheet = rightChickSheet;
-			chicken.ticsParImage = 50;
-			chicken.nbImages = 3;
-			chicken.xDebut = 4*24;
-			chicken.yDebut = 0;
-			chicken.L = 24;
-		}
-		else if(!chickenFacesRight){
-			chicken.sheet = leftChickSheet;
-			chicken.ticsParImage = 50;
-			chicken.nbImages = 3;
-			chicken.xDebut = 0*24;
-			chicken.yDebut = 0;
-			chicken.L = 24;
-		}
-	}
-	if(chicken.grounded){
-		chicken.Vy = 0;
-	}
-}
-
-function rndMinMax(min, max)
-{
-	var rndNb = Math.floor(Math.random() * (max - min)) + min;
-	return rndNb;
-}
-
-function afficherScore()
-{
-	contexte.textAlign = 'left'; //left, center ou right
-	contexte.font = "bold 20pt Arial";//regular si non précisé
-	contexte.fillStyle="#3a3a3a";
-	contexte.textBaseline="top";//top, bottom ou center
-	contexte.fillText("score : "+score, 30, 20);
-
-	if(score % 500 == 0){
-		playSound("scoreSound");
+		//spritesheet contenant les positions du personnage
+		var leftChickSheet = new Image();
+		leftChickSheet.src = 'images/chickLeft.png';
+		var rightChickSheet = new Image();
+		rightChickSheet.src = 'images/chickRight.png';
 		//horizontalSheet : i,indexImage,x,y,v,scale,Vx,Vy,jumping,grounded,ticsParImage,nbImages,L,H,xDebut,contexte,sheet
-		var scoreExplosion = new horizontalSheet(0,0,0,-25,5,0,0,false,false,5,5,118,118,0,contexte,scoreExplosionSheet);
-		explosions.push(scoreExplosion);
-		lastExplosion = Date.now();
-	}
-	//delai avant de cacher l'explosion
-	if(Date.now()-lastExplosion>900){
-		explosions.splice(0,1);
-	}
-}
+		var chicken = new horizontalSheet(0, 0, defaultChickenX, defaultChickenY, chickenSpeed, 0, 0, false, false, 5, 7, 24, 24, 0, contexte, rightChickSheet);
 
-function afficherVies(){
-	contexte.textAlign = 'left'; //left, center ou right
-	contexte.font = "bold 20pt Arial";//regular si non précisé
-	contexte.fillStyle="#3a3a3a";
-	contexte.textBaseline="top";//top, bottom ou center
-	contexte.fillText("vie :", 30, 55);
-	if(chickenLifes == 3){
-		lifeBar.xDebut = 0;
-	}
-	else if(chickenLifes == 2){
-		lifeBar.xDebut = 0 + 40;
-	}
-	else if(chickenLifes == 1){
-		lifeBar.xDebut = 0 + 80;
-	}
-	else{
-		setTimeout(gameOver,0);//pour voir le poulet sortir
-	}
-	lifeBar.afficher();
-}
+		var heartSprites = new Image(); heartSprites.src = "images/heartSpritesheet.png";
+		var lifeBar = new horizontalSheet(0, 0, 90, 48, 0, 0, 0, false, false, 5, 1, 40, 40, 0, contexte, heartSprites);
 
-function playSound(elementId) {
-  var audio = document.getElementById(elementId);
-  if(audio.paused) {
-    audio.play();
-  }
-  else{
-    audio.currentTime = 0
-  }
-}
-function stopSound(elementId) {
-  var audio = document.getElementById(elementId);
-  audio.pause();
-  audio.currentTime = 0
-}
-function setVolume(elementId, volume){
-	var audio = document.getElementById(elementId);
-	audio.volume = volume;
-}
+		explosions = [];
+		var scoreExplosionSheet = new Image();
+		scoreExplosionSheet.src = "images/Explosion.png";
+		var lastExplosion;
+		var showScoreExplos = false;
 
-function jouer(){
-	window.onload=requestAnimationFrame(animer);
-	playSound("bgMusic");
-	stopSound("menuMusic");
-	document.getElementById('gameStartDiv').style.display = "none";
-	document.getElementById('gameOverDiv').style.display = "none";
-}
+		//touches appuyees
+		var keysDown = {};
 
-function rejouer(){
-	location.reload();
-}
+		// Variables to track button press state
+		let isMovingLeft = false;
+		let isMovingRight = false;
+		let isMovingUp = false;
 
-function gameOver(){
-	window.cancelAnimationFrame(animAvecRequest);
-	for(var i=0;i<tanks.length;i++){
-		tanks.splice(i,1);
-	}
-	stopSound("bgMusic");
-	stopSound("tankSound");
-	playSound("menuMusic");
-	document.getElementById('gameOverDiv').style.display = 'block';
-	document.getElementById('score').innerHTML = score;
-}
+		//====================================================================//
+		//===============================FONCTIONS============================//
+		//====================================================================//
 
-</script>
+		// Function to move the chicken (update movement logic)
+		function updateMovement() {
+			if (isMovingLeft) {
+				moveLeft();
+			}
+			if (isMovingRight) {
+				moveRight();
+			}
+			if (isMovingUp) {
+				moveUp();
+			}
+		}
+
+		//animation
+		var t1 = Date.now();//demarrage animation
+
+		function animer() {
+			contexte.clearRect(0, 0, canevas.width, canevas.height);
+			afficher();
+			var t2 = Date.now();
+			var dt = (t2 - t1) / 1000;
+			incrementer(dt);
+			updateMovement();
+			t1 = t2;
+			animAvecRequest = requestAnimationFrame(animer);
+		};
+		// requestAnimationFrame(animer);
+
+		function afficher() {
+			contexte.drawImage(imageBG, xBG, yBG);
+			// plateformesVolantes à partir du tableau
+			for (var i = 0; i < plateformesVolantes.length; i++) {
+				contexte.drawImage(plateformesVolantes[i].image, plateformesVolantes[i].x, plateformesVolantes[i].y);
+			}
+			for (var i = 0; i < coins.length; i++) {
+				coins[i].afficher();
+			}
+			afficherScore();
+			afficherVies();
+			//player
+			chicken.afficher();
+			//chicken.scale(2);
+
+			//Affiche l'explosion du score
+			for (var i = 0; i < explosions.length; i++) {
+				explosions[i].afficher();
+			}
+
+			for (var i = 0; i < coins.length; i++) {
+				if (typeof collisCheck(chicken, coins[i]) == "string") {
+					// var coinsCollected += 1;
+					coins.splice(i, 1);
+					score += 500;
+					playSound("coinSound");
+				}
+			}
+
+			for (var i = 0; i < tanks.length; i++) {
+				tanks[i].afficher();
+				//Fait mourir le poulet si touche un tank
+				if (typeof collisCheck(chicken, tanks[i]) == "string") {
+					chickenHit += 1;
+				}
+				if (chickenHit > 15) {
+					chickenLifes -= 1;
+					playSound("hurtSound");
+					//Reset les hits
+					chickenHit = 0;
+				}
+				//Choisis la decrementation du x du tank
+				if (tankDirectionResult == "left") {
+					tanks[i].x += tanks[i].v;
+				}
+				else if (tankDirectionResult == "right") {
+					tanks[i].x -= tanks[i].v;
+				}
+
+				//Retirera les tanks en fonction de la direction
+				if (tanks[i].x > canevas.width && tankDirectionResult == "left") {
+					tanks.splice(i, 1);
+					stopSound("tankSound");
+					tankOnScreen = false;
+				}
+				else if (tanks[i].x < -250 && tankDirectionResult == "right") {
+					tanks.splice(i, 1);
+					stopSound("tankSound");
+					tankOnScreen = false;
+				}
+			}
+
+			//Cree les nouveaux tanks
+			var tankRandomizer = Math.random();
+			if (tankRandomizer < tankSpawnRate && !tankOnScreen) {
+				tankOnScreen = true;
+				var tankDirection = Math.random();
+
+				if (tankDirection > 0.5) {//viendra par la gauche
+					tankDirectionResult = "left";
+					//horizontalSheet : i,indexImage,x,y,v,scale,Vx,Vy,jumping,grounded,ticsParImage,nbImages,L,H,xDebut,contexte,sheet
+					var tank = new horizontalSheet(0, 0, 0 - canevas.width, canevas.height - 163, tankSpeed, 0, 0, false, false, 3, 8, 210, 210, 0 * 210, contexte, rightTankSheet);
+					playSound("tankSound");
+				}
+				else {//viendra par la droite
+					tankDirectionResult = "right";
+					//horizontalSheet : i,indexImage,x,y,v,scale,Vx,Vy,jumping,grounded,ticsParImage,nbImages,L,H,xDebut,contexte,sheet
+					var tank = new horizontalSheet(0, 0, 2 * canevas.width, canevas.height - 163, tankSpeed, 0, 0, false, false, 3, 8, 210, 210, 0 * 210, contexte, leftTankSheet);
+					playSound("tankSound");
+				}
+				tanks.push(tank);
+			}
+
+		};
+
+		function collisCheck(shapeA, shapeB) {
+			dirCollis = null;//initialiser direction de collision
+			//calcul de Dx (voir shéma sur feuille)
+			var Dx = (shapeA.x + shapeA.L / 2) - (shapeB.x + shapeB.L / 2);
+			//calcul de Dy
+			var Dy = (shapeA.y + shapeA.H / 2) - (shapeB.y + shapeB.H / 2);
+			// calcul du coté de la collision
+			var offsetX = shapeA.L / 2 + shapeB.L / 2 - Math.abs(Dx);
+			var offsetY = shapeA.H / 2 + shapeB.H / 2 - Math.abs(Dy);
+			//condition de collision
+			if (Math.abs(Dx) < shapeA.L / 2 + shapeB.L / 2 && Math.abs(Dy) < shapeA.H / 2 + shapeB.H / 2) {
+				if (offsetX >= offsetY) {
+					if (Dy > 0) {
+						dirCollis = "top";//top
+						shapeA.y += offsetY;//qd ils se touchent, offsetY=0
+					}
+					else {
+						dirCollis = "bottom";//bottom
+						shapeA.y -= offsetY;
+					}
+				}
+				else {
+					if (Dx > 0) {
+						dirCollis = "left";//left
+						shapeA.x += offsetX;//qd ils se touchent, offsetX=0
+					}
+					else {
+						dirCollis = "right";//right
+						shapeA.x -= offsetX;
+					}
+				}
+			}
+			return dirCollis;
+		}
+
+		function moveUp() {
+			if (chickenFacesRight) {
+				chicken.sheet = rightChickSheet;
+				chicken.xDebut = 2 * 24;
+			}
+			else if (!chickenFacesRight) {
+				chicken.sheet = leftChickSheet;
+				chicken.xDebut = 4 * 24;
+			}
+
+			if (chicken.grounded) {//Premier saut
+				playSound("jumpSound");
+				firstJump = false;
+				chicken.Vy -= firstJumpSpeed;
+			}
+			else if (Date.now() - lastWingMove > wingRateDelay) {//Battement des ailes
+				playSound("wingFlapSound");
+				setVolume("wingFlapSound", 0.15);
+				chicken.Vy -= wingsForce;
+				lastWingMove = Date.now();
+			}
+			chicken.ticsParImage = 5;
+			chicken.nbImages = 1;
+			chicken.L = 24;
+			chicken.jumping = true;
+			chicken.grounded = false;
+		}
+
+		function moveLeft() {
+			glissement = 0.95;//Reactive le glissement si perso depasse limite
+			chicken.ticsParImage = 5;
+			// chicken.sheet = leftChickenSheet;
+			chicken.sheet = leftChickSheet;
+			if (!chicken.grounded) {
+				chicken.nbImages = 1;
+				chicken.xDebut = 3 * 24;
+			}
+			else {
+				chicken.nbImages = 4;
+				chicken.xDebut = 3 * 24;
+			}
+			chicken.L = 24;
+			chicken.Vx -= chicken.v;
+			chickenFacesRight = false;
+
+			//Mouvement du decor vers la gauche
+			if (chicken.x < 0 + (canevas.width / 2)) {
+				score++;//Des point s'ajoute lors du deplacement
+				//Garde le personnage a sa place
+				chicken.x = 0 + (canevas.width / 2);
+				xBG += chickenSpeed;
+				glissement = 0.01;//Limite le glissement pour pas sortir du cadre
+
+				//Fait bouger les tank en consequence du mouvement
+				for (var i = 0; i < tanks.length; i++) {
+					tanks[i].x += chickenSpeed;
+				}
+
+				for (var i = 0; i < plateformesVolantes.length; i++) {
+					plateformesVolantes[i].x += chickenSpeed;
+					//Efface les plateforme qui depassent du canvas
+					if (plateformesVolantes[i].x > canevas.width) {
+						plateformesVolantes.splice(i, 1);
+						//Ajoute une nouvelle plateforme
+						pfX = rndMinMax(-700 - 140, 0 - 140);
+						pfY = rndMinMax(80, 350);
+						var pf = { x: pfX, y: pfY, image: imagePf, L: 134, H: 40 }
+						plateformesVolantes.push(pf);
+						//Ajoute les pieces
+						if (Math.random() < coinSpawnRate) {
+							var coin = new horizontalSheet(0, 0, pfX + 50, pfY - 40, 0, 0, 0, false, false, 5, 6, 30, 30, 0, contexte, imgCoins);
+							coins.push(coin);
+						}
+					}
+				}
+
+				//Retire les pieces qui sortent
+				for (var i = 0; i < coins.length; i++) {
+					coins[i].x += chickenSpeed;
+					if (coins[i].x > (canevas.width + 140)) {
+						coins.splice(i, 1);
+					}
+				}
+
+				//loop de background
+				if (xBG > 0) {
+					xBG = 0 - canevas.width;
+				}
+			}
+		}
+		function moveRight() {
+			glissement = 0.95;//Reactive le glissement si perso depasse limite
+			chicken.ticsParImage = 5;
+			chicken.sheet = rightChickSheet;
+			if (!chicken.grounded) {
+				chicken.nbImages = 1;
+				chicken.xDebut = 1 * 24;
+			}
+			else {
+				chicken.nbImages = 4;
+				chicken.xDebut = 0 * 24;
+			}
+			chicken.L = 24;
+			chicken.Vx += chicken.v;
+			chickenFacesRight = true;
+
+			//Mouvement du decor vers la droite
+			if (chicken.x > canevas.width - (canevas.width / 2)) {
+				score++;
+				//Garde le personnage a sa place
+				chicken.x = canevas.width - (canevas.width / 2);
+				xBG -= chickenSpeed;
+				glissement = 0.01;//Limite le glissement pour pas sortir du cadre
+
+				//Fait bouger les tank en consequence du mouvement
+				for (var i = 0; i < tanks.length; i++) {
+					tanks[i].x -= chickenSpeed;
+				}
+
+				for (var i = 0; i < plateformesVolantes.length; i++) {
+					plateformesVolantes[i].x -= chickenSpeed;
+					//Efface les plateforme qui depassent du canvas
+					if (plateformesVolantes[i].x < (-canevas.width - 140)) {
+						plateformesVolantes.splice(i, 1);
+						//Ajoute une nouvelle plateforme
+						pfX = rndMinMax(700, 1400);
+						pfY = rndMinMax(80, 350);
+						var pf = { x: pfX, y: pfY, image: imagePf, L: 134, H: 40 }
+						plateformesVolantes.push(pf);
+
+						//Ajoute les pieces
+						if (Math.random() < coinSpawnRate) {
+							var coin = new horizontalSheet(0, 0, pfX + 50, pfY - 40, 0, 0, 0, false, false, 5, 6, 30, 30, 0, contexte, imgCoins);
+							coins.push(coin);
+						}
+					}
+				}
+				//Retire les pieces qui sortent
+				for (var i = 0; i < coins.length; i++) {
+					coins[i].x -= chickenSpeed;
+					if (coins[i].x < (-canevas.width - 140)) {
+						coins.splice(i, 1);
+					}
+				}
+
+				//loop de background
+				if (xBG < 0 - (imageBG.width / 2)) {
+					xBG = 0;
+				}
+			}
+		}
+
+		function incrementer(dt) {
+			chicken.Vx *= glissement;//effet de glissement
+			chicken.Vy += gravity;//effet de gravitee
+			chicken.grounded = false;
+			chicken.x += chicken.Vx * dt;
+			chicken.y += chicken.Vy * dt;
+
+			// test de collision chicken - plateforme
+			for (var i = 0; i < plateformesVolantes.length; i++) {
+				var dir = collisCheck(chicken, plateformesVolantes[i]);
+				if (dir == 'left' || dir == 'right') {
+					chicken.Vx *= -1;//Fait rebondir perso
+					chicken.jumping = false;//bloque le saut
+				}
+				else if (dir == 'bottom') {
+					chicken.grounded = true;//les pieds touchent une plateforme
+					chicken.jumping = false;//Permet le saut
+					firstJump = true;
+					doubleJumped = false;
+				}
+				else if (dir == "top") {
+					chicken.Vy *= -1;//Fait descendre vers le bas
+				}
+			}
+
+			for (var i = 0; i < ground.length; i++) {
+				var dir = collisCheck(chicken, ground[i]);
+				if (dir == 'bottom') {
+					chicken.grounded = true;//les pieds touchent une plateforme
+					chicken.jumping = false;//Permet le saut
+					firstJump = true;
+					doubleJumped = false;
+				}
+			}
+
+			//Saut avec spacebar(32) ou flecheHaut(38) vers la gauche
+			if (32 in keysDown || 38 in keysDown) {
+				moveUp();
+			}
+			//fleche droite
+			if (39 in keysDown) {
+				moveRight();
+			}
+			//fleche gauche
+			if (37 in keysDown) {
+				moveLeft();
+			}
+
+			// //Aucune touche appuyes
+			if (Object.keys(keysDown).length == 0 && !chicken.jumping) {
+				if (chickenFacesRight) {
+					chicken.sheet = rightChickSheet;
+					chicken.ticsParImage = 50;
+					chicken.nbImages = 3;
+					chicken.xDebut = 4 * 24;
+					chicken.yDebut = 0;
+					chicken.L = 24;
+				}
+				else if (!chickenFacesRight) {
+					chicken.sheet = leftChickSheet;
+					chicken.ticsParImage = 50;
+					chicken.nbImages = 3;
+					chicken.xDebut = 0 * 24;
+					chicken.yDebut = 0;
+					chicken.L = 24;
+				}
+			}
+			if (chicken.grounded) {
+				chicken.Vy = 0;
+			}
+		}
+
+		function rndMinMax(min, max) {
+			var rndNb = Math.floor(Math.random() * (max - min)) + min;
+			return rndNb;
+		}
+
+		function afficherScore() {
+			contexte.textAlign = 'left'; //left, center ou right
+			contexte.font = "bold 20pt Arial";//regular si non précisé
+			contexte.fillStyle = "#3a3a3a";
+			contexte.textBaseline = "top";//top, bottom ou center
+			contexte.fillText("score : " + score, 30, 20);
+
+			if (score % 500 == 0) {
+				playSound("scoreSound");
+				//horizontalSheet : i,indexImage,x,y,v,scale,Vx,Vy,jumping,grounded,ticsParImage,nbImages,L,H,xDebut,contexte,sheet
+				var scoreExplosion = new horizontalSheet(0, 0, 0, -25, 5, 0, 0, false, false, 5, 5, 118, 118, 0, contexte, scoreExplosionSheet);
+				explosions.push(scoreExplosion);
+				lastExplosion = Date.now();
+			}
+			//delai avant de cacher l'explosion
+			if (Date.now() - lastExplosion > 900) {
+				explosions.splice(0, 1);
+			}
+		}
+
+		function afficherVies() {
+			contexte.textAlign = 'left'; //left, center ou right
+			contexte.font = "bold 20pt Arial";//regular si non précisé
+			contexte.fillStyle = "#3a3a3a";
+			contexte.textBaseline = "top";//top, bottom ou center
+			contexte.fillText("vie :", 30, 55);
+			if (chickenLifes == 3) {
+				lifeBar.xDebut = 0;
+			}
+			else if (chickenLifes == 2) {
+				lifeBar.xDebut = 0 + 40;
+			}
+			else if (chickenLifes == 1) {
+				lifeBar.xDebut = 0 + 80;
+			}
+			else {
+				setTimeout(gameOver, 0);//pour voir le poulet sortir
+			}
+			lifeBar.afficher();
+		}
+
+		function playSound(elementId) {
+			var audio = document.getElementById(elementId);
+			if (audio.paused) {
+				audio.play();
+			}
+			else {
+				audio.currentTime = 0
+			}
+		}
+		function stopSound(elementId) {
+			var audio = document.getElementById(elementId);
+			audio.pause();
+			audio.currentTime = 0
+		}
+		function setVolume(elementId, volume) {
+			var audio = document.getElementById(elementId);
+			audio.volume = volume;
+		}
+
+		function jouer() {
+			window.onload = requestAnimationFrame(animer);
+			playSound("bgMusic");
+			stopSound("menuMusic");
+			document.getElementById('gameStartDiv').style.display = "none";
+			document.getElementById('gameOverDiv').style.display = "none";
+		}
+
+		function rejouer() {
+			location.reload();
+		}
+
+		function gameOver() {
+			window.cancelAnimationFrame(animAvecRequest);
+			for (var i = 0; i < tanks.length; i++) {
+				tanks.splice(i, 1);
+			}
+			stopSound("bgMusic");
+			stopSound("tankSound");
+			playSound("menuMusic");
+			document.getElementById('gameOverDiv').style.display = 'block';
+			document.getElementById('score').innerHTML = score;
+		}
+
+		//==================================================================//
+		//===============================RUNTIME============================//
+		//==================================================================//
+
+		// Hides onscreen controls when not mobile
+		if (!/Mobi/i.test(window.navigator.userAgent)) {
+			document.getElementById('gameControls').style.display = "none";
+		}
+
+		// Add touchstart and touchend listeners for mobile
+		document.getElementById("moveLeftBtn").addEventListener("touchstart", () => isMovingLeft = true);
+		document.getElementById("moveLeftBtn").addEventListener("touchend", () => isMovingLeft = false);
+		document.getElementById("moveUpBtn").addEventListener("touchstart", () => isMovingUp = true);
+		document.getElementById("moveUpBtn").addEventListener("touchend", () => isMovingUp = false);
+		document.getElementById("moveRightBtn").addEventListener("touchstart", () => isMovingRight = true);
+		document.getElementById("moveRightBtn").addEventListener("touchend", () => isMovingRight = false);
+
+		// Prevent the default context menu from opening
+		document.addEventListener('contextmenu', (event) => {
+			event.preventDefault();
+		});
+
+		//inserer touches appuyées
+		document.addEventListener("keydown", enregistrer);
+		function enregistrer(event) {
+			keysDown[event.keyCode] = true;
+		}
+
+		//effacer touches relachees
+		document.addEventListener("keyup", effacer);
+		function effacer(event) {
+			delete keysDown[event.keyCode];
+		}
+
+	</script>
+
 </body>
+
 </html>
