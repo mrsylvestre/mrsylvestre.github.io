@@ -1,0 +1,3 @@
+[submodule "projects/chicken-vs-tank"]
+	path = projects/chicken-vs-tank
+	url = git@github.com:mrsylvestre/chicken-vs-tank.git
